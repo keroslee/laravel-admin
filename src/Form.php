@@ -2,6 +2,14 @@
 
 namespace Encore\Admin;
 
+use App\Area;
+use App\Brand;
+use App\Click;
+use App\Download;
+use App\Nettype;
+use App\Pv;
+use App\Reg;
+use App\RegCount;
 use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
@@ -630,6 +638,48 @@ class Form implements Renderable
         } elseif (request('after-save') == 3) {
             // view resource
             $url = rtrim($resourcesPath, '/')."/{$key}";
+        } elseif ('task' == request('flow')) {
+            $next = new Area();
+            $next->task_id = $this->model()->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/areas/'.$next->id.'/edit?flow=true';
+        } elseif ('area' == request('flow')) {
+            $next = new Nettype();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/nettypes/'.$next->id.'/edit?flow=true';
+        } elseif ('nettype' == request('flow')) {
+            $next = new Brand();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/brands/'.$next->id.'/edit?flow=true';
+        } elseif ('brand' == request('flow')) {
+            $next = new Pv();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/pvs/'.$next->id.'/edit?flow=true';
+        } elseif ('pv' == request('flow')) {
+            $next = new Click();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/clicks/'.$next->id.'/edit?flow=true';
+        } elseif ('click' == request('flow')) {
+            $next = new Download();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/downloads/'.$next->id.'/edit?flow=true';
+        } elseif ('download' == request('flow')) {
+            $next = new Reg();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/regs/'.$next->id.'/edit?flow=true';
+        } elseif ('reg' == request('flow')) {
+            $next = new RegCount();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/reg_counts/'.$next->id.'/edit?flow=true';
+        } elseif ('reg_count' == request('flow')) {
+            $url = request()->getSchemeAndHttpHost() . '/admin/tasks';
         } else {
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }
@@ -1195,6 +1245,11 @@ class Form implements Renderable
         $this->builder()->setAction($action);
 
         return $this;
+    }
+
+    public function getAction()
+    {
+        return $this->builder()->getAction();
     }
 
     /**
