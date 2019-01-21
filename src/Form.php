@@ -694,7 +694,7 @@ class Form implements Renderable
         } elseif ('misc' == request('flow')) {
 			$report = new Report();
 			$report->task_id = $this->model()->task->id;
-            $next->save();
+            $report->save();
             $url = request()->getSchemeAndHttpHost() . '/admin/tasks';
         } else {
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
