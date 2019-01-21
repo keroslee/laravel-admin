@@ -679,6 +679,19 @@ class Form implements Renderable
             $next->save();
             $url = request()->getSchemeAndHttpHost() . '/admin/reg_counts/'.$next->id.'/edit?flow=true';
         } elseif ('reg_count' == request('flow')) {
+            $next = new LoginCount();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/login_counts/'.$next->id.'/edit?flow=true';
+        } elseif ('login_count' == request('flow')) {
+            $next = new Misc();
+            $next->task_id = $this->model()->task->id;
+            $next->save();
+            $url = request()->getSchemeAndHttpHost() . '/admin/miscs/'.$next->id.'/edit?flow=true';
+        } elseif ('misc' == request('flow')) {
+			$report = new Report();
+			$report->task_id = $this->model()->task->id;
+            $next->save();
             $url = request()->getSchemeAndHttpHost() . '/admin/tasks';
         } else {
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
